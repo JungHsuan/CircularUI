@@ -10,15 +10,12 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.jh.circularlist.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
 
     <com.jh.circularlist.CircularListView
+        android:layout_centerInParent="true"
         android:id="@+id/my_circular_list"
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:background="#660022"
+        android:background="@drawable/circle_background"
         />
 </RelativeLayout>

@@ -52,7 +52,7 @@ public class CircularListView extends RelativeLayout {
     private float mLayoutCenter_x;
     private float mLayoutCenter_y;
     private float radius;
-    private float iconSize = 50;
+    private float iconSize = 96;
     private double degree = Math.PI / 4;
 
     private void init(){
@@ -80,24 +80,25 @@ public class CircularListView extends RelativeLayout {
     private ArrayList<View> mItemList;
 
 
-
     /**
      * add item into the list
      *
      */
-    public void addItems(final ArrayList<View> items){
+    public void setAdapter(final CircularAdapter adapter){
 
-        degree = 2* Math.PI / items.size();
+        degree = 2* Math.PI / adapter.getCount();
         mView.post(new Runnable() {
             @Override
             public void run() {
-                for(int i = 0 ; i <items.size() ; i++) {
+                for(int i = 0 ; i <adapter.getCount(); i++) {
 
                     //doLog("radius=" + radius);
                     //doLog("mLayoutCenter_x=" + mLayoutCenter_x + ", mLayoutCenter_y=" + mLayoutCenter_y);
-
-                    View item = items.get(i);
+                    View item = adapter.getItemAt(i);
+                    item.setClickable(false);
                     mView.addView(item);
+                    //iconSize = item.getLayoutParams().width;
+                    //doLog("iconSize=" + iconSize);
                     item.setTranslationX((float) (mLayoutCenter_x - iconSize + (radius * Math.cos(i * degree))));
                     item.setTranslationY((float) (mLayoutCenter_y - iconSize + (radius * Math.sin(i * degree))));
                     mItemList.add(item);

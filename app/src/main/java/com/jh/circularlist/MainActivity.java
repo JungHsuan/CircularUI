@@ -3,12 +3,10 @@ package com.jh.circularlist;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,15 +15,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        CircularListView circularListView = (CircularListView) findViewById(R.id.my_circular_list);
-
-        ArrayList<View> mItems = new ArrayList<>();
-        for(int i = 0; i < 8 ; i ++) {
-            ImageView imageView = new ImageView(this);
-            imageView.setImageResource(R.mipmap.ic_launcher);
-            mItems.add(imageView);
+        ArrayList<String> itemTitles = new ArrayList<>();
+        for(int i = 0 ; i < 8 ; i ++){
+            itemTitles.add(String.valueOf(i));
         }
-        circularListView.addItems(mItems);
+
+        CircularListView circularListView = (CircularListView) findViewById(R.id.my_circular_list);
+        CircularAdapter adapter = new CircularAdapter(this,itemTitles);
+        circularListView.setAdapter(adapter);
 
     }
 }

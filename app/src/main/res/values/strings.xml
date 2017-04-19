@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CircularList</string>
+    <string name="example_title">MyTitle</string>
 </resources>
