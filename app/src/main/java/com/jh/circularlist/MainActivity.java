@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ArrayList<String> itemTitles = new ArrayList<>();
-        for(int i = 0 ; i < 8 ; i ++){
+        for(int i = 0 ; i < 10 ; i ++){
             itemTitles.add(String.valueOf(i));
         }
 

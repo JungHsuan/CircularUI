@@ -52,8 +52,9 @@ public class CircularListView extends RelativeLayout {
     private float mLayoutCenter_x;
     private float mLayoutCenter_y;
     private float radius;
-    private float iconSize = 96;
+    private float iconSize = 0;
     private double degree = Math.PI / 4;
+    private float mMovingSpeed = 2000;  // default is 2000, larger -> slower
 
     private void init(){
         mItemList = new ArrayList<>();
@@ -90,18 +91,18 @@ public class CircularListView extends RelativeLayout {
         mView.post(new Runnable() {
             @Override
             public void run() {
-                for(int i = 0 ; i <adapter.getCount(); i++) {
-
-                    //doLog("radius=" + radius);
+                for(int i = 0 ; i < adapter.getCount(); i++) {
                     //doLog("mLayoutCenter_x=" + mLayoutCenter_x + ", mLayoutCenter_y=" + mLayoutCenter_y);
                     View item = adapter.getItemAt(i);
-                    item.setClickable(false);
+                    //item.setClickable(false);
                     mView.addView(item);
                     //iconSize = item.getLayoutParams().width;
                     //doLog("iconSize=" + iconSize);
                     item.setTranslationX((float) (mLayoutCenter_x - iconSize + (radius * Math.cos(i * degree))));
                     item.setTranslationY((float) (mLayoutCenter_y - iconSize + (radius * Math.sin(i * degree))));
                     mItemList.add(item);
+
+
 
                 }
             }
@@ -113,9 +114,10 @@ public class CircularListView extends RelativeLayout {
      * control touch event
      *
      */
-
     class CircularTouchListener implements View.OnTouchListener{
 
+        private float init_x = 0;
+        private float init_y = 0;
         private float pre_x = 0;
         private float pre_y = 0;
         private float cur_x = 0;
@@ -127,13 +129,20 @@ public class CircularListView extends RelativeLayout {
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    doLog("ACTION_DOWN");
+                    //doLog("ACTION_DOWN");
                     cur_x = event.getX();
                     cur_y = event.getY();
+                    init_x = event.getX();
+                    init_y = event.getY();
+                    Log.d("TAG", "count = " + mView.getChildCount());
                     return true;
 
+
+                /**
+                 *  do something when finger moving on the circle
+                 */
                 case MotionEvent.ACTION_MOVE:
-                    doLog("ACTION_MOVE");
+                    //doLog("ACTION_MOVE");
                     pre_x = cur_x;
                     pre_y = cur_y;
                     cur_x = event.getX();
@@ -143,15 +152,29 @@ public class CircularListView extends RelativeLayout {
 
                     if (cur_y >= mLayoutCenter_y) diff_x = -diff_x;
                     if (cur_x <= mLayoutCenter_x) diff_y = -diff_y;
-                    count += (diff_x + diff_y) / 2000;
+                    count += (diff_x + diff_y) / mMovingSpeed;
 
+                    // calculate new position around circle
                     for (int i = 0; i < mItemList.size(); i++) {
-
                         mItemList.get(i).setTranslationX((float) ((mLayoutCenter_x - (iconSize)
                                 + radius * Math.cos(i * degree + count * Math.PI * 2))));
                         mItemList.get(i).setTranslationY((float) ((mLayoutCenter_y - (iconSize)
                                 + radius * Math.sin(i * degree + count * Math.PI * 2))));
                     }
+
+                    return true;
+
+                case MotionEvent.ACTION_UP:
+                    //doLog("ACTION_UP");
+
+                    /**
+                     * need to know if it is a click
+                     */
+//                    float move_x = init_x - cur_x;
+//                    float move_y = init_y - cur_y;
+//                    float moveDistance = (float)Math.sqrt(move_x*move_x + move_y*move_y);
+//                    if(moveDistance < 50)  doLog("it is a click!");
+
 
                     return true;
             }
