@@ -47,14 +47,14 @@ public class CircularListView extends RelativeLayout {
      * get layout parameter
      */
     private RelativeLayout mView = this;
-    private float mLayoutWidth;
-    private float mLayoutHeight;
-    private float mLayoutCenter_x;
-    private float mLayoutCenter_y;
-    private float radius;
-    private float iconSize = 0;
-    private double degree = Math.PI / 4;
-    private float mMovingSpeed = 2000;  // default is 2000, larger -> slower
+    public float iconSize = 0;
+    public float LayoutWidth;
+    public float LayoutHeight;
+    public float LayoutCenter_x;
+    public  float LayoutCenter_y;
+    public float radius;
+    public double degree = Math.PI / 4;
+    public ArrayList<View> mItemList;
 
     private void init(){
         mItemList = new ArrayList<>();
@@ -62,23 +62,17 @@ public class CircularListView extends RelativeLayout {
         this.post(new Runnable() {
             @Override
             public void run() {
-                mLayoutWidth = mView.getWidth();
-                mLayoutHeight = mView.getHeight();
-                mLayoutCenter_x = mLayoutWidth / 2;
-                mLayoutCenter_y = mLayoutHeight / 2;
-                radius = mLayoutWidth / 3;
-                mView.setOnTouchListener(new CircularTouchListener());
-                doLog("mLayoutWidth=" + mLayoutWidth + ", mLayoutHeight=" + mLayoutHeight);
+                LayoutWidth = mView.getWidth();
+                LayoutHeight = mView.getHeight();
+                LayoutCenter_x = LayoutWidth / 2;
+                LayoutCenter_y = LayoutHeight / 2;
+                radius = LayoutWidth / 3;
+                doLog("mLayoutWidth=" + LayoutWidth + ", mLayoutHeight=" + LayoutHeight);
 
             }
         });
 
     }
-
-    /**
-     * save all items in an array. Item may be a view
-     */
-    private ArrayList<View> mItemList;
 
 
     /**
@@ -91,6 +85,10 @@ public class CircularListView extends RelativeLayout {
         mView.post(new Runnable() {
             @Override
             public void run() {
+
+                // set touch listener
+                mView.setOnTouchListener(new CircularTouchListener(getContext()));
+
                 for(int i = 0 ; i < adapter.getCount(); i++) {
                     //doLog("mLayoutCenter_x=" + mLayoutCenter_x + ", mLayoutCenter_y=" + mLayoutCenter_y);
                     View item = adapter.getItemAt(i);
@@ -98,8 +96,8 @@ public class CircularListView extends RelativeLayout {
                     mView.addView(item);
                     //iconSize = item.getLayoutParams().width;
                     //doLog("iconSize=" + iconSize);
-                    item.setTranslationX((float) (mLayoutCenter_x - iconSize + (radius * Math.cos(i * degree))));
-                    item.setTranslationY((float) (mLayoutCenter_y - iconSize + (radius * Math.sin(i * degree))));
+                    item.setTranslationX((float) (LayoutCenter_x - iconSize + (radius * Math.cos(i * degree))));
+                    item.setTranslationY((float) (LayoutCenter_y - iconSize + (radius * Math.sin(i * degree))));
                     mItemList.add(item);
 
 
@@ -108,78 +106,4 @@ public class CircularListView extends RelativeLayout {
             }
         });
     }
-
-
-    /**
-     * control touch event
-     *
-     */
-    class CircularTouchListener implements View.OnTouchListener{
-
-        private float init_x = 0;
-        private float init_y = 0;
-        private float pre_x = 0;
-        private float pre_y = 0;
-        private float cur_x = 0;
-        private float cur_y = 0;
-        private float count = 0;
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    //doLog("ACTION_DOWN");
-                    cur_x = event.getX();
-                    cur_y = event.getY();
-                    init_x = event.getX();
-                    init_y = event.getY();
-                    Log.d("TAG", "count = " + mView.getChildCount());
-                    return true;
-
-
-                /**
-                 *  do something when finger moving on the circle
-                 */
-                case MotionEvent.ACTION_MOVE:
-                    //doLog("ACTION_MOVE");
-                    pre_x = cur_x;
-                    pre_y = cur_y;
-                    cur_x = event.getX();
-                    cur_y = event.getY();
-                    float diff_x = cur_x - pre_x;
-                    float diff_y = cur_y - pre_y;
-
-                    if (cur_y >= mLayoutCenter_y) diff_x = -diff_x;
-                    if (cur_x <= mLayoutCenter_x) diff_y = -diff_y;
-                    count += (diff_x + diff_y) / mMovingSpeed;
-
-                    // calculate new position around circle
-                    for (int i = 0; i < mItemList.size(); i++) {
-                        mItemList.get(i).setTranslationX((float) ((mLayoutCenter_x - (iconSize)
-                                + radius * Math.cos(i * degree + count * Math.PI * 2))));
-                        mItemList.get(i).setTranslationY((float) ((mLayoutCenter_y - (iconSize)
-                                + radius * Math.sin(i * degree + count * Math.PI * 2))));
-                    }
-
-                    return true;
-
-                case MotionEvent.ACTION_UP:
-                    //doLog("ACTION_UP");
-
-                    /**
-                     * need to know if it is a click
-                     */
-//                    float move_x = init_x - cur_x;
-//                    float move_y = init_y - cur_y;
-//                    float moveDistance = (float)Math.sqrt(move_x*move_x + move_y*move_y);
-//                    if(moveDistance < 50)  doLog("it is a click!");
-
-
-                    return true;
-            }
-            return false;
-        }
-    }
-
 }

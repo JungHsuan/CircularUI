@@ -60,45 +60,7 @@ public class CircularAdapter {
             image.setImageResource(drawableList.get(data.indexOf(s)));
             TextView title = (TextView) view.findViewById(R.id.item_title);
             title.setText(s);
-            view.setOnTouchListener(new View.OnTouchListener() {
-
-                private float init_x = 0;
-                private float init_y = 0;
-                private float cur_x = 0;
-                private float cur_y = 0;
-                float moveDistance;
-
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-
-                    switch (event.getAction()){
-                        case MotionEvent.ACTION_DOWN:
-                            init_x = event.getX();
-                            init_x = event.getY();
-                            cur_x = event.getX();
-                            cur_y = event.getY();
-                            return true;
-                        case MotionEvent.ACTION_MOVE:
-                            cur_x = event.getX();
-                            cur_y = event.getY();
-                            float move_x = init_x - cur_x;
-                            float move_y = init_y - cur_y;
-                            moveDistance = (float)Math.sqrt(move_x*move_x + move_y*move_y);
-                            Log.d("TAG","moveDistance = " + moveDistance);
-                            if(moveDistance > 100) {
-                                break;
-                            }
-                            else return true;
-                        case MotionEvent.ACTION_UP:
-                            Toast.makeText(mContext, "This is item:" + s,Toast.LENGTH_SHORT).show();
-                            return false;
-                    }
-                    return false;
-                }
-            });
-
             mItemViews.add(view);
-            Log.d("TAG","size=" + mItemViews.size());
         }
 
     }
