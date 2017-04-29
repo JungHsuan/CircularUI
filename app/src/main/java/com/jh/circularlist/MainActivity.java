@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
             itemTitles.add(String.valueOf(i));
         }
 
+
+        // usage sample
         CircularListView circularListView = (CircularListView) findViewById(R.id.my_circular_list);
         CircularAdapter adapter = new CircularAdapter(this,itemTitles);
         circularListView.setAdapter(adapter);
