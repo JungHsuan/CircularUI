@@ -3,7 +3,6 @@ package com.jh.circularlist;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -11,6 +10,11 @@ import java.util.ArrayList;
 
 /**
  * Created by jh on 2017/4/14.
+ *
+ *
+ * According to Circle formula
+ * x = h + r * cos(theta)
+ * y = k + r * sin(theta)
  *
  */
 
@@ -46,29 +50,29 @@ public class CircularListView extends RelativeLayout {
     /**
      * get layout parameter
      */
-    private RelativeLayout mView = this;
-    public float iconSize = 0;
-    public float LayoutWidth;
-    public float LayoutHeight;
-    public float LayoutCenter_x;
-    public  float LayoutCenter_y;
+    private RelativeLayout mView;
+    public float icon_with = 0;
+    public float icon_height = 0;
+    public float layoutWidth;
+    public float layoutHeight;
+    public float layoutCenter_x;
+    public  float layoutCenter_y;
     public float radius;
     public double degree = Math.PI / 4;
     public ArrayList<View> mItemList;
 
     private void init(){
+        mView = this;
         mItemList = new ArrayList<>();
         doLog("init");
         this.post(new Runnable() {
             @Override
             public void run() {
-                LayoutWidth = mView.getWidth();
-                LayoutHeight = mView.getHeight();
-                LayoutCenter_x = LayoutWidth / 2;
-                LayoutCenter_y = LayoutHeight / 2;
-                radius = LayoutWidth / 3;
-                doLog("mLayoutWidth=" + LayoutWidth + ", mLayoutHeight=" + LayoutHeight);
-
+                layoutWidth = mView.getWidth();
+                layoutHeight = mView.getHeight();
+                layoutCenter_x = layoutWidth / 2;
+                layoutCenter_y = layoutHeight / 2;
+                radius = layoutWidth / 3;
             }
         });
 
@@ -90,18 +94,25 @@ public class CircularListView extends RelativeLayout {
                 mView.setOnTouchListener(new CircularTouchListener(getContext()));
 
                 for(int i = 0 ; i < adapter.getCount(); i++) {
-                    //doLog("mLayoutCenter_x=" + mLayoutCenter_x + ", mLayoutCenter_y=" + mLayoutCenter_y);
-                    View item = adapter.getItemAt(i);
-                    //item.setClickable(false);
+                    final int idx = i;
+                    final View item = adapter.getItemAt(i);
+
+                    //add view into parent
                     mView.addView(item);
-                    //iconSize = item.getLayoutParams().width;
-                    //doLog("iconSize=" + iconSize);
-                    item.setTranslationX((float) (LayoutCenter_x - iconSize + (radius * Math.cos(i * degree))));
-                    item.setTranslationY((float) (LayoutCenter_y - iconSize + (radius * Math.sin(i * degree))));
-                    mItemList.add(item);
 
-
-
+                    // need to get item width and height
+                    item.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            icon_with = item.getWidth();
+                            icon_height = item.getHeight();
+                            item.setTranslationX((float) (layoutCenter_x - (icon_with / 2 ) +
+                                    (radius * Math.cos(idx * degree))));
+                            item.setTranslationY((float) (layoutCenter_y - (icon_height / 2) +
+                                    (radius * Math.sin(idx * degree))));
+                            mItemList.add(item);
+                        }
+                    });
                 }
             }
         });

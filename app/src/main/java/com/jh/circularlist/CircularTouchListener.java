@@ -57,18 +57,18 @@ class CircularTouchListener implements View.OnTouchListener {
                 float diff_x = cur_x - pre_x;
                 float diff_y = cur_y - pre_y;
 
-                if (cur_y >= circleView.LayoutCenter_y) diff_x = -diff_x;
-                if (cur_x <= circleView.LayoutCenter_x) diff_y = -diff_y;
+                if (cur_y >= circleView.layoutCenter_y) diff_x = -diff_x;
+                if (cur_x <= circleView.layoutCenter_x) diff_y = -diff_y;
                 count += (diff_x + diff_y) / mMovingSpeed;
 
                 // calculate new position around circle
                 for (int i = 0; i < circleView.mItemList.size(); i++) {
                     circleView.mItemList.get(i).setTranslationX(
-                            (float) ((circleView.LayoutCenter_x - (circleView.iconSize) +
+                            (float) ((circleView.layoutCenter_x - (circleView.icon_with / 2 ) +
                                     circleView.radius * Math.cos(i * circleView.degree + count * Math.PI * 2))));
                     circleView.mItemList.get(i).setTranslationY(
-                            (float) ((circleView.LayoutCenter_y - (circleView.iconSize)
-                                    + circleView.radius * Math.sin(i * circleView.degree + count * Math.PI * 2))));
+                            (float) ((circleView.layoutCenter_y - (circleView.icon_height /2) +
+                                    circleView.radius * Math.sin(i * circleView.degree + count * Math.PI * 2))));
                 }
 
                 return true;

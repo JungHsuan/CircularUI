@@ -25,6 +25,5 @@ public class MainActivity extends AppCompatActivity {
         CircularListView circularListView = (CircularListView) findViewById(R.id.my_circular_list);
         CircularAdapter adapter = new CircularAdapter(this,itemTitles);
         circularListView.setAdapter(adapter);
-
     }
 }
