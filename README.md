@@ -36,4 +36,4 @@ CircularAdapter adapter = new CircularAdapter(this,itemTitles);
 ```
 
 ## CircularTlouchListener
-This custom listener implement the item click event and cicular translation.
+This custom listener implements the item click event and cicular translation.
