@@ -26,6 +26,7 @@ circularListView.setAdapter(adapter);
 ```
 3. Customize your items in CircularAdapter
 Example code for initialize Adapter:
+
 Here, the 'itemTitles' is just a ArrayList of String, you can modify it whatever you want.
 ```shell
 ArrayList<String> itemTitles = new ArrayList<>();
@@ -33,3 +34,6 @@ for(int i = 0 ; i < 10 ; i ++)
         itemTitles.add(String.valueOf(i));
 CircularAdapter adapter = new CircularAdapter(this,itemTitles);
 ```
+
+## CircularTlouchListener
+This custom listener implement the item click event and cicular translation.
