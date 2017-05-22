@@ -37,3 +37,20 @@ CircularAdapter adapter = new CircularAdapter(this,itemTitles);
 
 ## CircularTlouchListener
 This custom listener implements the item click event and cicular translation.
+```shell
+// usage sample
+CircularListView circularListView = (CircularListView) findViewById(R.id.my_circular_list);
+CircularAdapter adapter = new CircularAdapter(this,itemTitles);
+circularListView.setAdapter(adapter);
+circularListView.setOnItemClickListener(new CircularTouchListener.CircularItemClickListener() {
+@Override
+public void onItemClick(View view, int index) {
+        Toast.makeText(MainActivity.this,
+                "view :" + index + " is clicked!",
+                Toast.LENGTH_SHORT).show();
+                }
+        });
+```
+
+
+
