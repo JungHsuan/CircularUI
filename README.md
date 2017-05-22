@@ -35,7 +35,7 @@ for(int i = 0 ; i < 10 ; i ++)
 CircularAdapter adapter = new CircularAdapter(this,itemTitles);
 ```
 
-## CircularTlouchListener
+## CircularTouchListener
 This custom listener implements the item click event and cicular translation.
 ```shell
 // usage sample
