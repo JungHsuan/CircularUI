@@ -51,6 +51,7 @@ public class CircularListView extends RelativeLayout {
      * get layout parameter
      */
     private RelativeLayout mView;
+    private CircularTouchListener circularTouchListener;
     public float icon_with = 0;
     public float icon_height = 0;
     public float layoutWidth;
@@ -75,6 +76,7 @@ public class CircularListView extends RelativeLayout {
                 radius = layoutWidth / 3;
             }
         });
+        circularTouchListener = new CircularTouchListener(getContext());
 
     }
 
@@ -91,7 +93,7 @@ public class CircularListView extends RelativeLayout {
             public void run() {
 
                 // set touch listener
-                mView.setOnTouchListener(new CircularTouchListener(getContext()));
+                mView.setOnTouchListener(circularTouchListener);
 
                 for(int i = 0 ; i < adapter.getCount(); i++) {
                     final int idx = i;
@@ -116,5 +118,13 @@ public class CircularListView extends RelativeLayout {
                 }
             }
         });
+    }
+
+
+    /**
+     * set item click listener
+     */
+    public void setOnItemClickListener(CircularTouchListener.CircularItemClickListener listener){
+        circularTouchListener.setItemClickListener(listener);
     }
 }

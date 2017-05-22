@@ -13,6 +13,11 @@ import android.widget.Toast;
 
 class CircularTouchListener implements View.OnTouchListener {
 
+    interface CircularItemClickListener{
+        void onItemClick(View view, int index);
+    }
+
+    private CircularItemClickListener itemClickListener;
     private Context mContext;
     private float init_x = 0;
     private float init_y = 0;
@@ -30,6 +35,7 @@ class CircularTouchListener implements View.OnTouchListener {
     public CircularTouchListener(Context context){
         this.mContext = context;
     }
+
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
@@ -86,17 +92,17 @@ class CircularTouchListener implements View.OnTouchListener {
                     for (int i = 0; i < circleView.mItemList.size(); i++) {
                         View tmp = circleView.mItemList.get(i);
                         if (Utils.isTouchInside(cur_x, cur_y, tmp)) {
-                            Toast.makeText(mContext,
-                                    "view :" + i + " is clicked!",
-                                    Toast.LENGTH_SHORT).show();
+                            itemClickListener.onItemClick(tmp, i);
                             break;
                         }
                     }
                 }
-
-
                 return true;
         }
         return false;
+    }
+
+    public void setItemClickListener(CircularItemClickListener listener){
+        this.itemClickListener = listener;
     }
 }
