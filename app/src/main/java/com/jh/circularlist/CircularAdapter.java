@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,7 +55,6 @@ public class CircularAdapter {
 
         // for each data, display using an custom view
         for(final String s : data){
-            Log.d("TAG", s);
             View view = mInflater.inflate(R.layout.view_circular_item, null);
             ImageView image = (ImageView)view.findViewById(R.id.item_icon);
             image.setImageResource(drawableList.get(data.indexOf(s)));

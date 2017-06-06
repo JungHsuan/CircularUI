@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context="com.jh.circularlist.MainActivity">
 
-
     <com.jh.circularlist.CircularListView
         android:layout_centerInParent="true"
         android:id="@+id/my_circular_list"
