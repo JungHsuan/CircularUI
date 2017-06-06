@@ -4,7 +4,6 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "com.jh.circularlist"
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 1
@@ -26,6 +25,5 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.2.0'
     testCompile 'junit:junit:4.12'
-    compile 'com.github.JungHsuan:CircularList:v1.0.0'
 
 }
