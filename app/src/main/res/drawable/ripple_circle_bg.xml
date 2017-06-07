@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:color="#8800ccff"
+    tools:targetApi="lollipop">
+
+    <!--ripple growing color-->
+    <item android:id="@android:id/mask">
+        <shape android:shape="oval">
+            <solid android:color="#ffffff" />
+        </shape>
+    </item>
+
+
+    <!--base color-->
+    <item android:id="@+id/ripple">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android"
+            android:shape="oval" >
+            <solid
+                android:color="#88bbbbbb">
+            </solid>
+        </shape>
+    </item>
+
+</ripple>

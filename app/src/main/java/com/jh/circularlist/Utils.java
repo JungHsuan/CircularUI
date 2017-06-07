@@ -8,8 +8,7 @@ import android.view.View;
  * computation tools
  */
 
-public class Utils {
-
+ class Utils {
     /**
      *
      * @param x touch position of x

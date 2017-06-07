@@ -29,36 +29,36 @@ public class CircularListView extends RelativeLayout {
         init();
     }
 
-    private RelativeLayout mView;
+    private RelativeLayout mCircularLayout;
     private CircularTouchListener circularTouchListener;
-    public float icon_with = 0;
-    public float icon_height = 0;
+    public float itemWith = 0;
+    public float itemHeight = 0;
     public float layoutWidth;
     public float layoutHeight;
     public float layoutCenter_x;
     public float layoutCenter_y;
     public float radius;
-    public double degree = Math.PI / 4;
+    private double intervalDegree = Math.PI / 4;
     public ArrayList<View> mItemList;
 
     /**
         initialization
      */
     private void init() {
-        mView = this;
+        mCircularLayout = this;
         mItemList = new ArrayList<>();
         this.post(new Runnable() {
             @Override
             public void run() {
-                layoutWidth = mView.getWidth();
-                layoutHeight = mView.getHeight();
+                layoutWidth = mCircularLayout.getWidth();
+                layoutHeight = mCircularLayout.getHeight();
                 layoutCenter_x = layoutWidth / 2;
                 layoutCenter_y = layoutHeight / 2;
                 radius = layoutWidth / 3;
             }
         });
-        circularTouchListener = new CircularTouchListener(getContext());
-
+        circularTouchListener = new CircularTouchListener();
+        this.setOnTouchListener(circularTouchListener);
     }
 
 
@@ -70,44 +70,46 @@ public class CircularListView extends RelativeLayout {
     }
 
 
-    /**
-     * set your custom items into this view
-     */
-    public void setCustomItems( ){
 
+    public double getIntervalDegree(){
+        return intervalDegree;
     }
-    public void setAdapter(final CircularAdapter adapter) {
 
-        degree = 2 * Math.PI / adapter.getCount();
-        mView.post(new Runnable() {
+    /**
+     * add your custom items into this view
+     * @param constructor initialize your views in constructor
+     * @param degree interval degree between each item
+     */
+    public void setCircularItem(final CircularItemConstructor constructor, double degree) {
+
+        if(degree == 0) intervalDegree = 2.0f * Math.PI / (double)constructor.getCount();
+        else intervalDegree = degree;
+
+        mCircularLayout.post(new Runnable() {
             @Override
             public void run() {
 
-                // set touch listener
-                mView.setOnTouchListener(circularTouchListener);
-
-                for (int i = 0; i < adapter.getCount(); i++) {
+                for (int i = 0; i < constructor.getCount(); i++) {
                     final int idx = i;
-                    final View item = adapter.getItemAt(i);
-
-                    //add view into parent
-                    mView.addView(item);
+                    final View item = constructor.getItemAt(i);
+                    item.setClickable(false);
+                    mCircularLayout.addView(item);
 
                     /*
-                     * According to Circle formula
+                     * position items according to circle formula
                      * x = h + r * cos(theta)
                      * y = k + r * sin(theta)
+                     *
                      */
-                    // need to get item width and height
                     item.post(new Runnable() {
                         @Override
                         public void run() {
-                            icon_with = item.getWidth();
-                            icon_height = item.getHeight();
-                            item.setTranslationX((float) (layoutCenter_x - (icon_with / 2) +
-                                    (radius * Math.cos(idx * degree))));
-                            item.setTranslationY((float) (layoutCenter_y - (icon_height / 2) +
-                                    (radius * Math.sin(idx * degree))));
+                            itemWith = item.getWidth();
+                            itemHeight = item.getHeight();
+                            item.setTranslationX((float) (layoutCenter_x - (itemWith / 2) +
+                                    (radius * Math.cos(idx * intervalDegree))));
+                            item.setTranslationY((float) (layoutCenter_y - (itemHeight / 2) +
+                                    (radius * Math.sin(idx * intervalDegree))));
                             mItemList.add(item);
                         }
                     });

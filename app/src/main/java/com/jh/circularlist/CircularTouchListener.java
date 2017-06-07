@@ -1,9 +1,7 @@
 package com.jh.circularlist;
 
-import android.content.Context;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 /**
  * Created by j.h. on 2017/4/22.
@@ -11,14 +9,13 @@ import android.widget.Toast;
  * handle touch event of my circular ListView
  */
 
-class CircularTouchListener implements View.OnTouchListener {
+public class CircularTouchListener implements View.OnTouchListener {
 
     interface CircularItemClickListener{
         void onItemClick(View view, int index);
     }
 
     private CircularItemClickListener itemClickListener;
-    private Context mContext;
     private float init_x = 0;
     private float init_y = 0;
     private float pre_x = 0;
@@ -28,13 +25,6 @@ class CircularTouchListener implements View.OnTouchListener {
     private float count = 0;
     private float minClickDistance = 50.0f;
     private float mMovingSpeed = 2000.0f;  // default is 2000, larger -> slower
-
-    /**
-     * constructor
-     */
-    public CircularTouchListener(Context context){
-        this.mContext = context;
-    }
 
 
     @Override
@@ -70,11 +60,13 @@ class CircularTouchListener implements View.OnTouchListener {
                 // calculate new position around circle
                 for (int i = 0; i < circleView.mItemList.size(); i++) {
                     circleView.mItemList.get(i).setTranslationX(
-                            (float) ((circleView.layoutCenter_x - (circleView.icon_with / 2 ) +
-                                    circleView.radius * Math.cos(i * circleView.degree + count * Math.PI * 2))));
+                            (float) ((circleView.layoutCenter_x - (circleView.itemWith / 2 ) +
+                                    circleView.radius * Math.cos(i * circleView.getIntervalDegree() +
+                                            count * Math.PI * 2))));
                     circleView.mItemList.get(i).setTranslationY(
-                            (float) ((circleView.layoutCenter_y - (circleView.icon_height /2) +
-                                    circleView.radius * Math.sin(i * circleView.degree + count * Math.PI * 2))));
+                            (float) ((circleView.layoutCenter_y - (circleView.itemHeight / 2) +
+                                    circleView.radius * Math.sin(i * circleView.getIntervalDegree() +
+                                            count * Math.PI * 2))));
                 }
 
                 return true;
@@ -93,6 +85,7 @@ class CircularTouchListener implements View.OnTouchListener {
                         View tmp = circleView.mItemList.get(i);
                         if (Utils.isTouchInside(cur_x, cur_y, tmp)) {
                             itemClickListener.onItemClick(tmp, i);
+                            tmp.setClickable(true);
                             break;
                         }
                     }
