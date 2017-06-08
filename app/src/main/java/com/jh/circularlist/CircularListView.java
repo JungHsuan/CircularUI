@@ -38,7 +38,8 @@ public class CircularListView extends RelativeLayout {
     public float layoutCenter_x;
     public float layoutCenter_y;
     public float radius;
-    private double intervalDegree = Math.PI / 4;
+    private double intervalDegree;
+    public double startDegree = - Math.PI / 2;
     public ArrayList<View> mItemList;
 
     /**
@@ -107,9 +108,9 @@ public class CircularListView extends RelativeLayout {
                             itemWith = item.getWidth();
                             itemHeight = item.getHeight();
                             item.setTranslationX((float) (layoutCenter_x - (itemWith / 2) +
-                                    (radius * Math.cos(idx * intervalDegree))));
+                                    (radius * Math.cos(idx * intervalDegree + startDegree))));
                             item.setTranslationY((float) (layoutCenter_y - (itemHeight / 2) +
-                                    (radius * Math.sin(idx * intervalDegree))));
+                                    (radius * Math.sin(idx * intervalDegree + startDegree))));
                             mItemList.add(item);
                         }
                     });

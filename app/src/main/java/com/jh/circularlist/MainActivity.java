@@ -19,7 +19,7 @@ class MainActivity extends AppCompatActivity {
 
         // simple text item with numbers 0 ~ 9
         ArrayList<String> itemTitles = new ArrayList<>();
-        for(int i = 0 ; i < 10 ; i ++){
+        for(int i = 0 ; i < 12 ; i ++){
             itemTitles.add(String.valueOf(i));
         }
 

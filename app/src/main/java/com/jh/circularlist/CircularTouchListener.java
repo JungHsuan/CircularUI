@@ -62,11 +62,11 @@ public class CircularTouchListener implements View.OnTouchListener {
                     circleView.mItemList.get(i).setTranslationX(
                             (float) ((circleView.layoutCenter_x - (circleView.itemWith / 2 ) +
                                     circleView.radius * Math.cos(i * circleView.getIntervalDegree() +
-                                            count * Math.PI * 2))));
+                                            count * Math.PI * 2 + circleView.startDegree))));
                     circleView.mItemList.get(i).setTranslationY(
                             (float) ((circleView.layoutCenter_y - (circleView.itemHeight / 2) +
                                     circleView.radius * Math.sin(i * circleView.getIntervalDegree() +
-                                            count * Math.PI * 2))));
+                                            count * Math.PI * 2 + circleView.startDegree))));
                 }
 
                 return true;
