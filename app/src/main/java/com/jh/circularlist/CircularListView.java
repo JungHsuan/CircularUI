@@ -3,6 +3,8 @@ package com.jh.circularlist;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
@@ -39,14 +41,14 @@ public class CircularListView extends RelativeLayout {
     public float layoutCenter_y;
     public float radius;
     private double intervalDegree = Math.PI / 4;
-    public ArrayList<View> mItemList;
+    public ArrayList<View> itemViewList;
 
     /**
         initialization
      */
     private void init() {
         mCircularLayout = this;
-        mItemList = new ArrayList<>();
+        itemViewList = new ArrayList<>();
         this.post(new Runnable() {
             @Override
             public void run() {
@@ -84,7 +86,7 @@ public class CircularListView extends RelativeLayout {
 
         if(degree == 0) intervalDegree = 2.0f * Math.PI / (double)constructor.getCount();
         else intervalDegree = degree;
-
+        itemViewList = constructor.getAllViews();
         mCircularLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -92,7 +94,6 @@ public class CircularListView extends RelativeLayout {
                 for (int i = 0; i < constructor.getCount(); i++) {
                     final int idx = i;
                     final View item = constructor.getItemAt(i);
-                    item.setClickable(false);
                     mCircularLayout.addView(item);
 
                     /*
@@ -104,15 +105,21 @@ public class CircularListView extends RelativeLayout {
                     item.post(new Runnable() {
                         @Override
                         public void run() {
+
+                            item.setVisibility(View.INVISIBLE);
+                            item.setOnTouchListener(new CircularItemTouchListener(getContext(), mCircularLayout,circularTouchListener));
                             itemWith = item.getWidth();
                             itemHeight = item.getHeight();
-                            item.setTranslationX((float) (layoutCenter_x - (itemWith / 2) +
+                            item.setX((float) (layoutCenter_x - (itemWith / 2) +
                                     (radius * Math.cos(idx * intervalDegree))));
-                            item.setTranslationY((float) (layoutCenter_y - (itemHeight / 2) +
+                            item.setY((float) (layoutCenter_y - (itemHeight / 2) +
                                     (radius * Math.sin(idx * intervalDegree))));
-                            mItemList.add(item);
+                            item.setVisibility(View.VISIBLE);
+
+
                         }
                     });
+
                 }
             }
         });

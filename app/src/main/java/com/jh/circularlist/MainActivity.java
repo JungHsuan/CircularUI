@@ -24,19 +24,19 @@ class MainActivity extends AppCompatActivity {
         }
 
 
-        // just for demo fill with drawable
-        ArrayList<Integer> drawableList = new ArrayList<>();
-        drawableList.add(R.drawable.android);
-        drawableList.add(R.drawable.camera);
-        drawableList.add(R.drawable.cart);
-        drawableList.add(R.drawable.cloud);
-        drawableList.add(R.drawable.duck);
-        drawableList.add(R.drawable.email);
-        drawableList.add(R.drawable.facebook_box);
-        drawableList.add(R.drawable.ghost);
-        drawableList.add(R.drawable.home);
-        drawableList.add(R.drawable.lightbulb);
-        drawableList.add(R.drawable.message);
+//        // just for demo fill with drawable
+//        ArrayList<Integer> drawableList = new ArrayList<>();
+//        drawableList.add(R.drawable.android);
+//        drawableList.add(R.drawable.camera);
+//        drawableList.add(R.drawable.cart);
+//        drawableList.add(R.drawable.cloud);
+//        drawableList.add(R.drawable.duck);
+//        drawableList.add(R.drawable.email);
+//        drawableList.add(R.drawable.facebook_box);
+//        drawableList.add(R.drawable.ghost);
+//        drawableList.add(R.drawable.home);
+//        drawableList.add(R.drawable.lightbulb);
+//        drawableList.add(R.drawable.message);
 
 
         // usage sample
