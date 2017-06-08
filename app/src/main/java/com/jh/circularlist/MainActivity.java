@@ -1,10 +1,10 @@
 package com.jh.circularlist;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.ScaleAnimation;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,44 +24,39 @@ class MainActivity extends AppCompatActivity {
         }
 
 
-//        // just for demo fill with drawable
-//        ArrayList<Integer> drawableList = new ArrayList<>();
-//        drawableList.add(R.drawable.android);
-//        drawableList.add(R.drawable.camera);
-//        drawableList.add(R.drawable.cart);
-//        drawableList.add(R.drawable.cloud);
-//        drawableList.add(R.drawable.duck);
-//        drawableList.add(R.drawable.email);
-//        drawableList.add(R.drawable.facebook_box);
-//        drawableList.add(R.drawable.ghost);
-//        drawableList.add(R.drawable.home);
-//        drawableList.add(R.drawable.lightbulb);
-//        drawableList.add(R.drawable.message);
-
-
         // usage sample
         CircularListView circularListView = (CircularListView) findViewById(R.id.my_circular_list);
-        circularListView.setCircularItem(new ItemConstructor(getApplicationContext(), itemTitles),0);
+        circularListView.setCircularItem(new ItemConstructor(getLayoutInflater(), itemTitles),0);
         circularListView.setOnItemClickListener(new CircularTouchListener.CircularItemClickListener() {
             @Override
             public void onItemClick(View view, int index) {
                 Toast.makeText(MainActivity.this,
                         "view :" + index + " is clicked!",
                         Toast.LENGTH_SHORT).show();
+
+                // click animation
+                ScaleAnimation animation = new ScaleAnimation(0.5f, 1.0f, 0.5f, 1.0f,
+                        ScaleAnimation.RELATIVE_TO_SELF, 0.5f,
+                        ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
+                animation.setDuration(500);
+                view.startAnimation(animation);
             }
         });
     }
 
+
+
+    // you should extends CircularItemConstructor to add your custom item
     private class ItemConstructor extends CircularItemConstructor{
 
         private ArrayList<String> mItems;
         private LayoutInflater mInflater;
         private ArrayList<View> mItemViews;
 
-        public ItemConstructor(Context context, ArrayList<String> items){
+        public ItemConstructor(LayoutInflater inflater, ArrayList<String> items){
             this.mItemViews = new ArrayList<>();
             this.mItems = items;
-            this.mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            this.mInflater = inflater;
 
             for(final String s : mItems){
                 View view = mInflater.inflate(R.layout.view_circular_item, null);

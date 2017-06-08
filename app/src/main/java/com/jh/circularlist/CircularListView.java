@@ -2,9 +2,10 @@ package com.jh.circularlist;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.view.animation.OvershootInterpolator;
+import android.view.animation.ScaleAnimation;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
@@ -14,7 +15,6 @@ import java.util.ArrayList;
  */
 
 public class CircularListView extends RelativeLayout {
-
 
     public CircularListView(Context context) {
         super(context);
@@ -31,7 +31,6 @@ public class CircularListView extends RelativeLayout {
         init();
     }
 
-    private RelativeLayout mCircularLayout;
     private CircularTouchListener circularTouchListener;
     public float itemWith = 0;
     public float itemHeight = 0;
@@ -44,23 +43,26 @@ public class CircularListView extends RelativeLayout {
     public ArrayList<View> itemViewList;
 
     /**
-        initialization
+     * initialization
      */
     private void init() {
-        mCircularLayout = this;
-        itemViewList = new ArrayList<>();
-        this.post(new Runnable() {
+
+        // need to get the real height and width of view
+        post(new Runnable() {
             @Override
             public void run() {
-                layoutWidth = mCircularLayout.getWidth();
-                layoutHeight = mCircularLayout.getHeight();
+                Log.e("CircularListView", "get layout width and height");
+                layoutWidth = getWidth();
+                layoutHeight = getHeight();
                 layoutCenter_x = layoutWidth / 2;
                 layoutCenter_y = layoutHeight / 2;
                 radius = layoutWidth / 3;
             }
         });
+
+        itemViewList = new ArrayList<>();
         circularTouchListener = new CircularTouchListener();
-        this.setOnTouchListener(circularTouchListener);
+        setOnTouchListener(circularTouchListener);
     }
 
 
@@ -72,57 +74,71 @@ public class CircularListView extends RelativeLayout {
     }
 
 
-
-    public double getIntervalDegree(){
+    /**
+     * get interval degree of each view
+     * @return degree
+     */
+    public double getIntervalDegree() {
         return intervalDegree;
     }
 
     /**
      * add your custom items into this view
+     *
      * @param constructor initialize your views in constructor
-     * @param degree interval degree between each item
+     * @param degree      interval degree between each item
      */
-    public void setCircularItem(final CircularItemConstructor constructor, double degree) {
+    public void setCircularItem(CircularItemConstructor constructor, double degree) {
 
-        if(degree == 0) intervalDegree = 2.0f * Math.PI / (double)constructor.getCount();
-        else intervalDegree = degree;
+        // set display interval degree
+        if (degree == 0)
+            intervalDegree = 2.0f * Math.PI / (double) constructor.getCount();
+        else
+            intervalDegree = degree;
+
+        // add all item view into parent layout
         itemViewList = constructor.getAllViews();
-        mCircularLayout.post(new Runnable() {
-            @Override
-            public void run() {
+        for (int i = 0; i < constructor.getCount(); i++) {
+            final int idx = i;
+            final View item = constructor.getItemAt(i);
+            addView(item);
 
-                for (int i = 0; i < constructor.getCount(); i++) {
-                    final int idx = i;
-                    final View item = constructor.getItemAt(i);
-                    mCircularLayout.addView(item);
+            // wait for view drawn to get width and height
+            item.post(new Runnable() {
+                @Override
+                public void run() {
 
+                    item.setVisibility(View.INVISIBLE);
+                    itemWith = item.getWidth();
+                    itemHeight = item.getHeight();
                     /*
                      * position items according to circle formula
-                     * x = h + r * cos(theta)
-                     * y = k + r * sin(theta)
+                     * margin left -> x = h + r * cos(theta)
+                     * margin top -> y = k + r * sin(theta)
                      *
                      */
-                    item.post(new Runnable() {
-                        @Override
-                        public void run() {
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) item.getLayoutParams();
+                    params.setMargins(
+                            (int)(layoutCenter_x - (itemWith / 2) + (radius * Math.cos(idx * intervalDegree))),
+                            (int)(layoutCenter_y - (itemHeight / 2) + (radius * Math.sin(idx * intervalDegree))),
+                            0,
+                            0);
+                    item.setLayoutParams(params);
+                    item.setVisibility(View.VISIBLE);
 
-                            item.setVisibility(View.INVISIBLE);
-                            item.setOnTouchListener(new CircularItemTouchListener(getContext(), mCircularLayout,circularTouchListener));
-                            itemWith = item.getWidth();
-                            itemHeight = item.getHeight();
-                            item.setX((float) (layoutCenter_x - (itemWith / 2) +
-                                    (radius * Math.cos(idx * intervalDegree))));
-                            item.setY((float) (layoutCenter_y - (itemHeight / 2) +
-                                    (radius * Math.sin(idx * intervalDegree))));
-                            item.setVisibility(View.VISIBLE);
-
-
-                        }
-                    });
+                    //show animation
+                    ScaleAnimation animation = new ScaleAnimation(0.2f, 1.0f, 0.2f, 1.0f,
+                            ScaleAnimation.RELATIVE_TO_SELF, 0.5f,
+                            ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
+                    animation.setDuration(500);
+                    animation.setInterpolator(new OvershootInterpolator());
+                    item.startAnimation(animation);
 
                 }
-            }
-        });
+            });
+
+        }
+
     }
 
 

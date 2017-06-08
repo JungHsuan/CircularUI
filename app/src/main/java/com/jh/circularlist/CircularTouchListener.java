@@ -1,18 +1,18 @@
 package com.jh.circularlist;
 
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 /**
  * Created by j.h. on 2017/4/22.
- *
+ * <p>
  * handle touch event of my circular ListView
  */
 
 public class CircularTouchListener implements View.OnTouchListener {
 
-    interface CircularItemClickListener{
+    interface CircularItemClickListener {
         void onItemClick(View view, int index);
     }
 
@@ -23,73 +23,86 @@ public class CircularTouchListener implements View.OnTouchListener {
     private float pre_y = 0;
     private float cur_x = 0;
     private float cur_y = 0;
-    private float count = 0;
-    private float minClickDistance = 50.0f;
-    private float mMovingSpeed = 2000.0f;  // default is 2000, larger -> slower
+    private float moveAccumulator = 0;
+    private float move_x = 0;
+    private float move_y = 0;
+    private float minClickDistance = 30.0f;
+    private float minMoveDistance = 10.0f;
+    private float mMovingSpeed = 2000.0f;  // default is 2000, larger > faster
 
 
-    public void setItemClickListener(CircularItemClickListener listener){
+    public void setItemClickListener(CircularItemClickListener listener) {
         this.itemClickListener = listener;
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
 
-        CircularListView circleView = (CircularListView) v;
+        final CircularListView circularView = (CircularListView) v;
 
         switch (event.getAction()) {
+
             case MotionEvent.ACTION_DOWN:
-                //doLog("ACTION_DOWN");
                 cur_x = event.getX();
                 cur_y = event.getY();
                 init_x = event.getX();
                 init_y = event.getY();
 
-            /*
-             *  do something when finger moving on the circle
-             */
             case MotionEvent.ACTION_MOVE:
-                //Log.d("parent","ACTION_MOVE");
                 pre_x = cur_x;
                 pre_y = cur_y;
                 cur_x = event.getX();
                 cur_y = event.getY();
 
-                Log.d("parent", "current:" + cur_x + ", " + cur_y);
-
                 float diff_x = cur_x - pre_x;
                 float diff_y = cur_y - pre_y;
+                move_x = init_x - cur_x;
+                move_y = init_y - cur_y;
+                float moveDistance = (float) Math.sqrt(move_x * move_x + move_y * move_y);
 
-                if (cur_y >= circleView.layoutCenter_y) diff_x = -diff_x;
-                if (cur_x <= circleView.layoutCenter_x) diff_y = -diff_y;
-                count += (diff_x + diff_y) / mMovingSpeed;
 
-                // calculate new position around circle
-                for (int i = 0; i < circleView.itemViewList.size(); i++) {
-                    circleView.itemViewList.get(i).setTranslationX(
-                            (float) ((circleView.layoutCenter_x - (circleView.itemWith / 2 ) +
-                                    circleView.radius * Math.cos(i * circleView.getIntervalDegree() +
-                                            count * Math.PI * 2))));
-                    circleView.itemViewList.get(i).setTranslationY(
-                            (float) ((circleView.layoutCenter_y - (circleView.itemHeight / 2) +
-                                    circleView.radius * Math.sin(i * circleView.getIntervalDegree() +
-                                            count * Math.PI * 2))));
+                if (cur_y >= circularView.layoutCenter_y) diff_x = -diff_x;
+                if (cur_x <= circularView.layoutCenter_x) diff_y = -diff_y;
+
+                // should rotate the layout
+                if (moveDistance > minMoveDistance) {
+                    moveAccumulator += (diff_x + diff_y) / mMovingSpeed;
+
+                    // calculate new position around circle
+                    for (int i = 0; i < circularView.itemViewList.size(); i++) {
+                        final int idx = i;
+                        final View itemView = circularView.itemViewList.get(i);
+                        itemView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)
+                                        itemView.getLayoutParams();
+                                params.setMargins(
+                                        (int) (circularView.layoutCenter_x - (circularView.itemWith / 2) +
+                                                (circularView.radius * Math.cos(idx * circularView.getIntervalDegree() +
+                                                        moveAccumulator * Math.PI * 2))),
+                                        (int) (circularView.layoutCenter_y - (circularView.itemHeight / 2) +
+                                                (circularView.radius * Math.sin(idx * circularView.getIntervalDegree() +
+                                                        moveAccumulator * Math.PI * 2))),
+                                        0,
+                                        0);
+                                itemView.setLayoutParams(params);
+                                itemView.requestLayout();
+                            }
+                        });
+                    }
                 }
+
 
                 return true;
 
             case MotionEvent.ACTION_UP:
-                //doLog("ACTION_UP");
 
-                /*
-                 * need to know if it is a click
-                 */
-                float move_x = init_x - cur_x;
-                float move_y = init_y - cur_y;
-                float moveDistance = (float) Math.sqrt(move_x * move_x + move_y * move_y);
+                // it is an click action if move distance < min distance
+                moveDistance = (float) Math.sqrt(move_x * move_x + move_y * move_y);
                 if (moveDistance < minClickDistance) {
-                    for (int i = 0; i < circleView.itemViewList.size(); i++) {
-                        View tmp = circleView.itemViewList.get(i);
+                    for (int i = 0; i < circularView.itemViewList.size(); i++) {
+                        View tmp = circularView.itemViewList.get(i);
                         if (Utils.isTouchInside(cur_x, cur_y, tmp)) {
                             itemClickListener.onItemClick(tmp, i);
                             break;
