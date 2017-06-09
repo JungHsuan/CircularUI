@@ -24,8 +24,8 @@ public class CircularListView extends RelativeLayout implements CircularAdapter.
     public float layoutCenter_x;
     public float layoutCenter_y;
     public float radius;
-    private double intervalDegree = Math.PI / 4;
-    private double oldIntervalDegree = Math.PI / 4;
+    private double intervalAngle = Math.PI / 4;
+    private double pre_IntervalAngle = Math.PI / 4;
     public ArrayList<View> itemViewList;
     private CircularAdapter circularAdapter;
     public static float MoveAccumulator = 0;
@@ -77,13 +77,12 @@ public class CircularListView extends RelativeLayout implements CircularAdapter.
         circularTouchListener.setItemClickListener(listener);
     }
 
-
     /**
      * get interval degree of each view
      * @return degree
      */
-    public double getIntervalDegree() {
-        return intervalDegree;
+    public double getIntervalAngle() {
+        return intervalAngle;
     }
 
 
@@ -111,27 +110,38 @@ public class CircularListView extends RelativeLayout implements CircularAdapter.
      */
     private void setItemPosition(){
 
-
-        int updateChildCount = circularAdapter.getCount();
+        int itemCount = circularAdapter.getCount();
         int existChildCount = getChildCount();
+        boolean isLayoutEmpty = existChildCount == 0;
 
-        // set display interval degree
-        if(existChildCount == 0) oldIntervalDegree = updateChildCount;
-        else  oldIntervalDegree = 2.0f * Math.PI / (double) existChildCount;
-        intervalDegree = 2.0f * Math.PI / (double) updateChildCount;
+        // remove item from parent if it has been remove from list
+        System.out.println("before changed:" + itemViewList.size());
+        System.out.println("After changed:" + circularAdapter.getAllViews().size());
+        for(int i = 0 ; i < itemViewList.size(); i ++){
+            View itemAfterChanged = itemViewList.get(i);
+            if(circularAdapter.getAllViews().indexOf(itemAfterChanged) == -1) {
+                System.out.println("do remove :" + itemAfterChanged);
+                removeView(itemAfterChanged);
+            }
+        }
+        itemViewList = (ArrayList<View>) circularAdapter.getAllViews().clone();
 
 
-        // clear all child before add
-        removeAllViews();
+        pre_IntervalAngle = isLayoutEmpty ? 0 : 2.0f * Math.PI / (double) existChildCount;
+        intervalAngle = 2.0f * Math.PI / (double) itemCount;
+
 
         // add all item view into parent layout
-        itemViewList = circularAdapter.getAllViews();
-
         for (int i = 0; i < circularAdapter.getCount(); i++) {
             final int idx = i;
             final View item = circularAdapter.getItemAt(i);
-            addView(item);
-            item.setVisibility(View.INVISIBLE);
+
+            // add item if no parent
+            if(item.getParent() == null) {
+                item.setVisibility(View.INVISIBLE);
+                addView(item);
+                System.out.println("do add :" + item);
+            }
 
             // wait for view drawn to get width and height
             item.post(new Runnable() {
@@ -147,14 +157,13 @@ public class CircularListView extends RelativeLayout implements CircularAdapter.
                      *
                      */
                     ValueAnimator valueAnimator = new ValueAnimator();
-                    valueAnimator.setFloatValues((float)oldIntervalDegree, (float)intervalDegree);
+                    valueAnimator.setFloatValues((float) pre_IntervalAngle, (float) intervalAngle);
                     valueAnimator.setDuration(500);
                     valueAnimator.setInterpolator(new OvershootInterpolator());
                     valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                         @Override
                         public void onAnimationUpdate(ValueAnimator animation) {
                             float value = (Float) (animation.getAnimatedValue());
-
                             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) item.getLayoutParams();
                             params.setMargins(
                                     (int)(layoutCenter_x - (itemWith / 2) + (radius *

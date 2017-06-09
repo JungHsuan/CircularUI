@@ -82,10 +82,10 @@ public class CircularTouchListener implements View.OnTouchListener {
                                         itemView.getLayoutParams();
                                 params.setMargins(
                                         (int) (circularView.layoutCenter_x - (circularView.itemWith / 2) +
-                                                (circularView.radius * Math.cos(idx * circularView.getIntervalDegree() +
+                                                (circularView.radius * Math.cos(idx * circularView.getIntervalAngle() +
                                                         CircularListView.MoveAccumulator * Math.PI * 2))),
                                         (int) (circularView.layoutCenter_y - (circularView.itemHeight / 2) +
-                                                (circularView.radius * Math.sin(idx * circularView.getIntervalDegree() +
+                                                (circularView.radius * Math.sin(idx * circularView.getIntervalAngle() +
                                                         CircularListView.MoveAccumulator * Math.PI * 2))),
                                         0,
                                         0);

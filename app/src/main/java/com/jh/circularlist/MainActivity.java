@@ -4,13 +4,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 class MainActivity extends AppCompatActivity {
 
@@ -23,7 +21,7 @@ class MainActivity extends AppCompatActivity {
 
         // simple text item with numbers 0 ~ 9
         ArrayList<String> itemTitles = new ArrayList<>();
-        for(int i = 0 ; i < 12 ; i ++){
+        for(int i = 0 ; i < 6 ; i ++){
             itemTitles.add(String.valueOf(i));
         }
 
