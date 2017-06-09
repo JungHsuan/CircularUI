@@ -6,6 +6,22 @@
     android:layout_height="match_parent"
     tools:context="com.jh.circularlist.MainActivity">
 
+    <Button
+        android:id="@+id/bt_remove_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/bt_remove_item"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/bt_add_item"
+        android:layout_toRightOf="@id/bt_remove_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/bt_add_item"
+        android:textAllCaps="false"/>
+
+
     <com.jh.circularlist.CircularListView
         android:layout_centerInParent="true"
         android:id="@+id/my_circular_list"

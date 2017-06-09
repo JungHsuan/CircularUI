@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">CircularList</string>
     <string name="example_title">MyTitle</string>
+    <string name="bt_add_item">Add Item</string>
+    <string name="bt_remove_item">Remove Item</string>
 </resources>
