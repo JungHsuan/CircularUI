@@ -114,19 +114,6 @@ public class CircularListView extends RelativeLayout implements CircularAdapter.
         int existChildCount = getChildCount();
         boolean isLayoutEmpty = existChildCount == 0;
 
-        // remove item from parent if it has been remove from list
-        System.out.println("before changed:" + itemViewList.size());
-        System.out.println("After changed:" + circularAdapter.getAllViews().size());
-        for(int i = 0 ; i < itemViewList.size(); i ++){
-            View itemAfterChanged = itemViewList.get(i);
-            if(circularAdapter.getAllViews().indexOf(itemAfterChanged) == -1) {
-                System.out.println("do remove :" + itemAfterChanged);
-                removeView(itemAfterChanged);
-            }
-        }
-        itemViewList = (ArrayList<View>) circularAdapter.getAllViews().clone();
-
-
         pre_IntervalAngle = isLayoutEmpty ? 0 : 2.0f * Math.PI / (double) existChildCount;
         intervalAngle = 2.0f * Math.PI / (double) itemCount;
 
@@ -194,6 +181,18 @@ public class CircularListView extends RelativeLayout implements CircularAdapter.
             });
 
         }
+
+        // remove item from parent if it has been remove from list
+        System.out.println("before changed:" + itemViewList.size());
+        System.out.println("After changed:" + circularAdapter.getAllViews().size());
+        for(int i = 0 ; i < itemViewList.size(); i ++){
+            View itemAfterChanged = itemViewList.get(i);
+            if(circularAdapter.getAllViews().indexOf(itemAfterChanged) == -1) {
+                System.out.println("do remove :" + itemAfterChanged);
+                removeView(itemAfterChanged);
+            }
+        }
+        itemViewList = (ArrayList<View>) circularAdapter.getAllViews().clone();
     }
 
 
