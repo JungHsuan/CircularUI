@@ -3,6 +3,8 @@
 Display views in circular shape
 
 ![demo video](https://raw.githubusercontent.com/JungHsuan/CircularList/master/screenShot/ezgif-1-c709720d20.gif)
+![demo video](https://raw.githubusercontent.com/JungHsuan/CircularList/master/screenShot/ezgif-1-f4c73d896d_radius.gif)
+
 
 ## How To Use
 Step 1. Add the JitPack repository to your gradle file
@@ -120,5 +122,12 @@ adapter.addItem(view);
 ```shell
 adapter.removeItemAt(index);
 ```
+
+## Set circle radius
+Value smaller than zero will be set as zero.
+```shell
+circularListView.setRadius(float r);
+```
+
 
 
