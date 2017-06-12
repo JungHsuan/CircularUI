@@ -1,6 +1,6 @@
-# CircularList
+# CircularUI
 
-Display views in circular shape
+Display views in circular shape with smooth scroll and item click action. 
 
 ![demo video](https://raw.githubusercontent.com/JungHsuan/CircularList/master/screenShot/ezgif-1-c709720d20.gif)
 ![demo video](https://raw.githubusercontent.com/JungHsuan/CircularList/master/screenShot/ezgif-1-f4c73d896d_radius.gif)
