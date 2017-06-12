@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-class ExampleActivity extends AppCompatActivity {
+public class ExampleActivity extends AppCompatActivity {
 
     private CircularItemAdapter adapter;
 
@@ -27,9 +27,10 @@ class ExampleActivity extends AppCompatActivity {
 
 
         // usage sample
-        CircularListView circularListView = (CircularListView) findViewById(R.id.my_circular_list);
+        final CircularListView circularListView = (CircularListView) findViewById(R.id.my_circular_list);
         adapter = new CircularItemAdapter(getLayoutInflater(), itemTitles);
         circularListView.setAdapter(adapter);
+        circularListView.setRadius(100);
         circularListView.setOnItemClickListener(new CircularTouchListener.CircularItemClickListener() {
             @Override
             public void onItemClick(View view, int index) {
@@ -59,6 +60,26 @@ class ExampleActivity extends AppCompatActivity {
                 TextView itemView = (TextView) view.findViewById(R.id.bt_item);
                 itemView.setText(String.valueOf(adapter.getCount() + 1));
                 adapter.addItem(view);
+            }
+        });
+
+
+        // remove item example
+        Button btEnlargeRadius = (Button) findViewById(R.id.bt_enlarge_radius);
+        btEnlargeRadius.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                circularListView.setRadius(circularListView.radius += 15);
+            }
+        });
+
+
+        // remove item example
+        Button btReduceRadius = (Button) findViewById(R.id.bt_reduce_radius);
+        btReduceRadius.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                circularListView.setRadius(circularListView.radius -= 15);
             }
         });
     }

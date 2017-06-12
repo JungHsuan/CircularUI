@@ -3,7 +3,6 @@ package com.jh.circularlist;
 import android.view.View;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 /**
  * Created by jh on 2017/4/15.

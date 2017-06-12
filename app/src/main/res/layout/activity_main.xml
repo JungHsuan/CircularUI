@@ -16,10 +16,31 @@
     <Button
         android:id="@+id/bt_add_item"
         android:layout_toRightOf="@id/bt_remove_item"
+        android:layout_toEndOf="@id/bt_remove_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/bt_add_item"
         android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/bt_enlarge_radius"
+        android:layout_toRightOf="@id/bt_add_item"
+        android:layout_toEndOf="@id/bt_add_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/bt_radius_enlarge"
+        android:textAllCaps="false"/>
+
+
+    <Button
+        android:id="@+id/bt_reduce_radius"
+        android:layout_toRightOf="@id/bt_enlarge_radius"
+        android:layout_toEndOf="@id/bt_enlarge_radius"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/bt_radius_reduce"
+        android:textAllCaps="false"/>
+
 
 
     <com.jh.circularlist.CircularListView

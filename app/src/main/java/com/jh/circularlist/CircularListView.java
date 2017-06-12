@@ -71,6 +71,23 @@ public class CircularListView extends RelativeLayout implements CircularAdapter.
 
 
     /**
+     * set radius of circle(distance of list item between center)
+     * @param r radius of circle. The default radius is layout width divide by 3
+     */
+    public void setRadius(float r){
+
+        // check minimal value
+        r = (r < 0) ? 0 : r;
+        radius = r;
+
+        // support dynamically changing
+        if(circularAdapter != null)
+            circularAdapter.notifyItemChange();
+
+    }
+
+
+    /**
      * set item click listener
      */
     public void setOnItemClickListener(CircularTouchListener.CircularItemClickListener listener) {
