@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-class MainActivity extends AppCompatActivity {
+class ExampleActivity extends AppCompatActivity {
 
     private CircularItemAdapter adapter;
 
@@ -33,7 +33,7 @@ class MainActivity extends AppCompatActivity {
         circularListView.setOnItemClickListener(new CircularTouchListener.CircularItemClickListener() {
             @Override
             public void onItemClick(View view, int index) {
-                Toast.makeText(MainActivity.this,
+                Toast.makeText(ExampleActivity.this,
                         "view at index " + index + " is clicked!",
                         Toast.LENGTH_SHORT).show();
             }
