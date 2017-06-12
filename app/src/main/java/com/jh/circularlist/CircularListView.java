@@ -79,6 +79,7 @@ public class CircularListView extends RelativeLayout implements CircularAdapter.
 
     /**
      * get interval degree of each view
+     *
      * @return degree
      */
     public double getIntervalAngle() {
@@ -93,8 +94,8 @@ public class CircularListView extends RelativeLayout implements CircularAdapter.
 
     /**
      * add your custom items into this view
-     * @param adapter initialize your views in adapter
      *
+     * @param adapter initialize your views in adapter
      */
     public void setAdapter(CircularAdapter adapter) {
         // register item change listener
@@ -106,9 +107,8 @@ public class CircularListView extends RelativeLayout implements CircularAdapter.
 
     /**
      * set the circular position of each item
-     *
      */
-    private void setItemPosition(){
+    private void setItemPosition() {
 
         int itemCount = circularAdapter.getCount();
         int existChildCount = getChildCount();
@@ -124,7 +124,7 @@ public class CircularListView extends RelativeLayout implements CircularAdapter.
             final View item = circularAdapter.getItemAt(i);
 
             // add item if no parent
-            if(item.getParent() == null) {
+            if (item.getParent() == null) {
                 item.setVisibility(View.INVISIBLE);
                 addView(item);
                 System.out.println("do add :" + item);
@@ -153,9 +153,9 @@ public class CircularListView extends RelativeLayout implements CircularAdapter.
                             float value = (Float) (animation.getAnimatedValue());
                             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) item.getLayoutParams();
                             params.setMargins(
-                                    (int)(layoutCenter_x - (itemWith / 2) + (radius *
+                                    (int) (layoutCenter_x - (itemWith / 2) + (radius *
                                             Math.cos(idx * value + CircularListView.MoveAccumulator * Math.PI * 2))),
-                                    (int)(layoutCenter_y - (itemHeight / 2) + (radius *
+                                    (int) (layoutCenter_y - (itemHeight / 2) + (radius *
                                             Math.sin(idx * value + CircularListView.MoveAccumulator * Math.PI * 2))),
                                     0,
                                     0);
@@ -163,31 +163,16 @@ public class CircularListView extends RelativeLayout implements CircularAdapter.
                         }
                     });
                     valueAnimator.start();
-
-
                     item.setVisibility(View.VISIBLE);
-
-                    //show animation
-                    /*
-                    ScaleAnimation animation = new ScaleAnimation(0.2f, 1.0f, 0.2f, 1.0f,
-                            ScaleAnimation.RELATIVE_TO_SELF, 0.5f,
-                            ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
-                    animation.setDuration(500);
-                    animation.setInterpolator(new OvershootInterpolator());
-                    item.startAnimation(animation);
-                    */
-
                 }
             });
 
         }
 
         // remove item from parent if it has been remove from list
-        System.out.println("before changed:" + itemViewList.size());
-        System.out.println("After changed:" + circularAdapter.getAllViews().size());
-        for(int i = 0 ; i < itemViewList.size(); i ++){
+        for (int i = 0; i < itemViewList.size(); i++) {
             View itemAfterChanged = itemViewList.get(i);
-            if(circularAdapter.getAllViews().indexOf(itemAfterChanged) == -1) {
+            if (circularAdapter.getAllViews().indexOf(itemAfterChanged) == -1) {
                 System.out.println("do remove :" + itemAfterChanged);
                 removeView(itemAfterChanged);
             }
