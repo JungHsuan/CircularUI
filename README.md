@@ -1,56 +1,124 @@
 # CircularList
 
-Display views in circular way
+Display views in circular shape
 
-![heart rate](https://raw.githubusercontent.com/JungHsuan/CircularList/master/screenShot/Screenshot_20170429-214403.png)
-![heart rate](https://raw.githubusercontent.com/JungHsuan/CircularList/master/screenShot/Screenshot_20170429-214409.png)
+![demo video](https://raw.githubusercontent.com/JungHsuan/CircularList/master/screenShot/ezgif-1-c709720d20.gif)
 
 ## How To Use
-
-1. Clone the project then there is an example in MainActivity: 
+Step 1. Add the JitPack repository to your gradle file
 ```shell
-// usage sample
-CircularListView circularListView = (CircularListView) findViewById(R.id.my_circular_list);
-CircularAdapter adapter = new CircularAdapter(this,itemTitles);
-circularListView.setAdapter(adapter);
+allprojects {
+        repositories {
+                ...
+                maven { url 'https://jitpack.io' }
+        }
+}
 ```
-2. Set CircularListView in your xml file:
+Step 2. Add the dependency
+```shell
+dependencies {
+        compile 'com.github.JungHsuan:CircularList:1.0'
+}
+```
+
+Step 3. Add CircularListView in your layout xml
 ```shell
 <com.jh.circularlist.CircularListView
-        android:layout_centerInParent="true"
         android:id="@+id/my_circular_list"
         android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:background="@drawable/circle_background"
-        />
+        android:layout_height="300dp"/>
 ```
-3. Customize your items in CircularAdapter
-Example code for initialize Adapter:
 
-Here, the 'itemTitles' is just a ArrayList of String, you can modify it whatever you want.
+Step 4. Create an custom adaper extend from CircularAdapter
 ```shell
+    // you should extends CircularAdapter to add your custom item
+    private class CircularItemAdapter extends CircularAdapter {
+
+        private ArrayList<String> mItems;       // custom data, here we simply use string
+        private LayoutInflater mInflater;       
+        private ArrayList<View> mItemViews;     // to store all list item 
+
+        public CircularItemAdapter(LayoutInflater inflater, ArrayList<String> items){
+            this.mItemViews = new ArrayList<>();
+            this.mItems = items;
+            this.mInflater = inflater;
+
+            for(final String s : mItems){
+                View view = mInflater.inflate(R.layout.view_circular_item, null);
+                TextView itemView = (TextView) view.findViewById(R.id.bt_item);
+                itemView.setText(s);
+                mItemViews.add(view);
+            }
+        }
+
+        @Override
+        public ArrayList<View> getAllViews() {
+            return mItemViews;
+        }
+
+        @Override
+        public int getCount() {
+            return mItemViews.size();
+        }
+
+        @Override
+        public View getItemAt(int i) {
+            return mItemViews.get(i);
+        }
+
+        @Override
+        public void removeItemAt(int i) {
+            if(mItemViews.size() > 0) {
+                // remove from view list
+                mItemViews.remove(i);
+                // this is necessary to call to notify change
+                notifyItemChange(); 
+            }
+        }
+
+        @Override
+        public void addItem(View view) {
+            // add to view list
+            mItemViews.add(view);
+            // // this is necessary to call to notify change
+            notifyItemChange();
+        }
+    }
+```
+
+
+Step 4. inistialize CircularListView in your activity
+```shell
+
+// simple text item with numbers 0 ~ 9
 ArrayList<String> itemTitles = new ArrayList<>();
-for(int i = 0 ; i < 10 ; i ++)
+for(int i = 0 ; i < 6 ; i ++){
         itemTitles.add(String.valueOf(i));
-CircularAdapter adapter = new CircularAdapter(this,itemTitles);
-```
+}
 
-## CircularTouchListener
-This custom listener implements the item click event and cicular translation.
-```shell
-// usage sample
 CircularListView circularListView = (CircularListView) findViewById(R.id.my_circular_list);
-CircularAdapter adapter = new CircularAdapter(this,itemTitles);
-circularListView.setAdapter(adapter);
+CircularItemAdapter adapter = new CircularItemAdapter(getLayoutInflater(), itemTitles);
 circularListView.setOnItemClickListener(new CircularTouchListener.CircularItemClickListener() {
-@Override
-public void onItemClick(View view, int index) {
-        Toast.makeText(MainActivity.this,
-                "view :" + index + " is clicked!",
-                Toast.LENGTH_SHORT).show();
-                }
+            @Override
+            public void onItemClick(View view, int index) {
+            }
         });
 ```
 
+## Add an item into list
+```shell
+// inflate a layout
+View view = getLayoutInflater().inflate(R.layout.view_circular_item, null);
+TextView itemView = (TextView) view.findViewById(R.id.bt_item);
+itemView.setText(String.valueOf(adapter.getCount() + 1));
+
+// add to list
+adapter.addItem(view);
+```
+
+## Remove an item from list
+```shell
+adapter.removeItemAt(index);
+```
 
 
