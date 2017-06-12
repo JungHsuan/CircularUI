@@ -19,7 +19,7 @@ allprojects {
 Step 2. Add the dependency
 ```shell
 dependencies {
-        compile 'com.github.JungHsuan:CircularList:1.0'
+        compile 'com.github.JungHsuan:CircularList:1.1'
 }
 ```
 
