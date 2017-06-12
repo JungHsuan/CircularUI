@@ -116,7 +116,7 @@ itemView.setText(String.valueOf(adapter.getCount() + 1));
 adapter.addItem(view);
 ```
 
-## Remove item from list
+## Remove an item from list
 ```shell
 adapter.removeItemAt(index);
 ```
