@@ -14,7 +14,7 @@ import android.widget.RelativeLayout;
 
 public class CircularTouchListener implements View.OnTouchListener {
 
-    interface CircularItemClickListener {
+    public interface CircularItemClickListener {
         void onItemClick(View view, int index);
     }
 
